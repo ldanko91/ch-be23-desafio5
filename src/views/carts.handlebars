@@ -1,0 +1,28 @@
+<h1>Productos en el carrito</h1>
+<section id="carritos">
+    <div>
+        {{#each carritos}}
+        <div>
+            <h2>Carrito con ID:{{_id}}</h2>
+            {{#each id}}
+            <ul>
+                <li>{{title}}</li>
+                <li>ID:{{_id}}</li>
+                <li>{{description}}</li>
+                <li>Categoría:{{category}}</li>
+                <li>Código:{{code}}</li>
+                <li>Stock:{{stock}}</li>
+            </ul>
+            <button>Quitar del carrito</button>
+            {{/each}}
+        </div>
+        {{/each}}
+        {{#if hasPrevPage}}
+        <a href="./products/{{prevPage}}"><button>Anterior</button></a>
+        {{/if}}
+
+        {{#if hasNextPage}}
+        <a href="products/?page={{nextPage}}"><button>Siguiente</button></a>
+        {{/if}}
+    </div>
+</section>
