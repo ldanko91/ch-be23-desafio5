@@ -4,7 +4,11 @@ import ProductsDBManager from "../dao/dbManagers/ProductsDBManager.js";
 const dbProdsRouter = Router();
 const DBProdsManager = new ProductsDBManager();
 
-dbProdsRouter.get('/', async(req,res)=>{    
+dbProdsRouter.get('/', async (req, res) => {
+    const userSession = req.session.user
+    if (!userSession) {
+        res.render("login")
+    } else {    
     let pageq = parseInt(req.query.page) || 1;
     let limitq = parseInt(req.query.limit) || 10;
     const filterByq = req.query.filterBy 
@@ -18,9 +22,14 @@ dbProdsRouter.get('/', async(req,res)=>{
         productos,page,hasPrevPage,hasNextPage,prevPage,nextPage,
         title: "Listado de productos"
     })
+    }
 })
 
 dbProdsRouter.get('/:pcod', async(req,res)=>{
+    const userSession = req.session.user
+    if (!userSession) {
+        res.render("login")
+    } else {
     let {pcod} = req.params
     let productos = await DBProdsManager.getProductByCode(pcod);
     console.log(productos);
@@ -28,6 +37,7 @@ dbProdsRouter.get('/:pcod', async(req,res)=>{
         productos,
         title: `${productos[0].title} código ${pcod}`
     })
+    }
 })
 
 dbProdsRouter.post('/', async(req,res)=>{
@@ -35,7 +45,8 @@ dbProdsRouter.post('/', async(req,res)=>{
     let newProd = {code, title, description, price, thumbnail, stock, category};
     let upload = await DBProdsManager.addProduct(newProd);
     res.send({status:"success", payload:upload})
-})
+}
+)
 
 dbProdsRouter.put('/:pid', async(req,res)=>{
     let {title, description, price, thumbnail, stock, category} = req.body;
@@ -43,12 +54,14 @@ dbProdsRouter.put('/:pid', async(req,res)=>{
     let {pid} = req.params
     let update = await DBProdsManager.updateProductByCode(pid,updProd);
     res.send({status:"success", payload:update})
-})
+}
+)
 
 dbProdsRouter.delete('/:pid', async(req,res)=>{
     let {pid} = req.params
     let delProd = await DBProdsManager.deleteProductByCode(pid);
     res.send({status:"success", payload:delProd})
-})
+}
+)
 
 export default dbProdsRouter;

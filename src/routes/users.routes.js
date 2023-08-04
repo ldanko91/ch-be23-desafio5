@@ -3,7 +3,6 @@ const usersRouter = Router();
 
 usersRouter.get("/register", (req, res) => {
     const userSession = req.session.user
-    console.log(userSession)
     if (!userSession) {
         res.render("register")
     } else {
@@ -14,7 +13,6 @@ usersRouter.get("/register", (req, res) => {
 
 usersRouter.get("/login", (req, res) => {
     const userSession = req.session.user
-    console.log(userSession)
     if (!userSession) {
         res.render("login")
     } else {
@@ -25,7 +23,6 @@ usersRouter.get("/login", (req, res) => {
 
 usersRouter.get("/", (req, res) => {
     const userSession = req.session.user
-    console.log(userSession)
     if (!userSession) {
         res.render("login")
     } else {
@@ -36,12 +33,17 @@ usersRouter.get("/", (req, res) => {
 
 usersRouter.get("/logout", (req, res)=>{
     const userSession = req.session.user
-    console.log(userSession)
     if (!userSession) {
         res.render("login")
     } else {
-    req.session.destroy(),
-    res.render("login")
+        req.session.destroy((err) => {
+
+            if (err) {
+                console.error("Error al destruir la sesión:", err.message);
+            }
+            res.clearCookie('connect.sid');
+            res.redirect("/login");
+        });
 }
 })
 

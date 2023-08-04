@@ -13,6 +13,19 @@ form.addEventListener('submit', e =>{
         headers:{
             'Content-Type':'application/json'
         }
-    }).then(result=>result.json()).
-    then(json=>console.log(json))     
+    }).then(result => result.json())
+        .then(json => {
+            if (json.status === 'success') {
+                alert('Registro exitoso. ¡Bienvenido!');
+                window.location.replace('/');
+
+            } else {
+                alert('Error en el registro. Por favor, inténtalo de nuevo.');
+            }
+        })
+
+        .catch(error => {
+            console.error('Error en la solicitud:', error);
+            alert('Ha ocurrido un error en la solicitud. Por favor, inténtalo de nuevo más tarde.');
+        });
 })
